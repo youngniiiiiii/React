@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!--태그: input류와 그밖에
+
+    input : 사용자로부터 값을 입력받아 서버로 전달한다.
+            name속성과 value속성
+            name=value
+    <input type="text" name="userid" value="test"/>
+    userid=test 구나 하고 넘어간다.
+    input, select, textarea 태그는 name속성과 value값을 갖고 서버로 값(정보)을 보낸다.(배열 접근 O)
+    
+    var userid = document.getElementsByName("userid")
+    userid[0].value = "test";
+
+    그밖에?
+    table, div, span/strong : id속성, class속성
+    주의사항 : id는 무조건 문서 하나에 하나만 갖는다. (배열 접근 X)
+              중복하면 안된다.
+
+    <span id="result">결과1</span>
+    <span id="result">결과2</span>  -> 자바 스크립트에서 접근하면 얘는 버리고 온다....
+
+    
+    var result = document.getElementById("result"); 
+    result.innerHTML = "새로운 결과";
+    
+    -->
+</body>
+</html>
