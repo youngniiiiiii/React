@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>주급계산하기</h1>
+</body>
+</html>
+<script>
+    let employee = [
+        {name:"홍길동", time:40, salary:10000, total:0},
+        {name:"임꺽정", time:15, salary:20000, total:0},
+        {name:"장길산", time:20, salary:20000, total:0},
+        {name:"강감찬", time:30, salary:15000, total:0},
+        {name:"이순신", time:40, salary:30000, total:0},
+        
+    ];
+
+    for(emp of employee) {
+        emp["total"] = emp["time"] * emp["salary"];
+    }
+
+    for(emp of employee) {
+        console.log(`이름 : ${emp["name"]} 근무시간 : ${emp["time"]} 시간당급여액 : ${emp["salary"]} 총액 : ${emp["total"]}`);
+    }
+
+
+</script>
