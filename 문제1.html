@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 문제1) 사각형 면적 구하기
+사각형의 가로 세로를 입력받아 면적을 구하여 출력하시오-->
+    <h1>사각형 면적 구하기</h1>
+    가로 : <input type="text" name="width" id="width"><br/>
+    세로 : <input type="text" name="height" id="height"><br/>
+    
+    <button type="text" onclick="surface()">면적</button><br/>
+
+    result: <span id="result"></span>
+</body>
+</html>
+<script>
+    function surface(){
+        가로 = document.getElementById("width").value;
+        세로 = document.getElementById("height").value;
+        result = parseInt(가로) * parseInt(세로);
+        document.getElementById("result").innerHTML=result;
+    }
+</script>

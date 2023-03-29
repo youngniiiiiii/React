@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" name="number" value="10"><br/>
+    <input type="text" name="number" value="20"><br/>
+    <input type="text" name="number" value="30"><br/>
+    <input type="text" name="number" value="40"><br/>
+    <input type="text" name="number" value="50"><br/>
+    
+    <input type="text" name="result" value=""><br/>
+</body>
+</html>
+<script>
+    //name 속성은 input 태그류만 있어서 그밖에 태그는 사용못한다
+    var numbers = document.getElementsByName("number");
+    var results = document.getElementsByName("result");
+
+    sum=0;
+    for(i =0; i<numbers.length; i++){
+        sum = sum + parseInt(numbers[i].value);
+    }
+    results[0].value = "합계 : " +sum;
+</script>

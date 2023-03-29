@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>화살표함수(람다)</h1>
+</body>
+</html>
+<script>
+    let person =[
+        {name:"홍길동", age:11, "phone":"010-0000-0000"},
+        {name:"임꺽정", age:21, "phone":"010-0000-0000"},
+        {name:"장길산", age:41, "phone":"010-0000-0000"},
+        {name:"이순신", age:22, "phone":"010-0000-0000"},
+        {name:"강감찬", age:15, "phone":"010-0000-0000"},
+        {name:"윤성일", age:27, "phone":"010-0000-0000"},
+        {name:"서희", age:18, "phone":"010-0000-0000"},
+        {name:"윤관", age:49, "phone":"010-0000-0000"},
+        {name:"김종서", age:60, "phone":"010-0000-0000"},
+        {name:"척준경", age:34, "phone":"010-0000-0000"}
+    ];
+
+    //배열에 데이터 추가하기
+    person.push({name:"김성훈", age:43, phone:"010-1234-5678"});
+
+    person.forEach( (p)=>{
+        console.log(`${p.name} ${p.age} ${p.phone}`);
+    });
+
+    //문제1. 성이 윤씨인 사람 찾아내기
+
+    //p에는 JSON 객체가 전달된다.
+    result = person.filter(p=> p.name.startsWith("윤") );
+    console.log(result);
+
+    ageless19 = person.filter(p=>p.age<=19);  //미성년
+    agege19 = person.filter(p=> p.age >19);   //성년
+
+    console.log(ageless19);
+    console.log(agege19);
+
+    //정렬 - 데이터를 순서대로 늘어놓는다. (오름차순, 내림차순)
+    let sorted = person.sort((p1, p2)=> p1.age - p2.age);
+
+    //-음수, 0 , 양수 두객체를 비교했을때 앞의것이 작으면 음수 둘이같으면 0
+    //뒤의것이 크면 양수를 반환한다
+
+    console.log( sorted );
+
+    let sorted2 = person.sort((p1, p2) => {
+        if(p1.name > p2.name)
+            return 1;
+        else if(p1.name < p2.name)
+            return -1;
+        else
+            return 0;
+    });
+    console.log( sorted2 );
+
+</script>
