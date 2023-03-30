@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    
+</head>
+<body>
+    이름 : <input type="text" id="name"><br/>
+    국어 : <input type="text" id="kor"><br/>
+    영어 : <input type="text" id="eng"><br/>
+    수학 : <input type="text" id="mat"><br/>
+    <button type="button"> 결과확인</button>
+    
+    <div id="result">
+    </div>
+
+</body>
+</html>
+<script>
+
+    //jquery
+
+    $(document).ready( ()=>{
+        $("button").click( ()=>{
+            name = document.getElementById("name").value;
+    kor  = parseInt(document.getElementById("kor").value);
+    eng  = parseInt(document.getElementById("eng").value);
+    mat  = parseInt(document.getElementById("mat").value);
+
+        if(kor>100 || kor<0){
+            alert("0~100사이의 수를 입력하세요");
+            return;
+        }else if (eng>100 || eng<0){
+            alert("0~100사이의 수를 입력하세요");
+            return;
+        }else if (mat>100 || mat<0){
+            alert("0~100사이의 수를 입력하세요");
+            return;
+        }
+
+    total = kor + eng + mat;
+    avg = total/3;
+        
+    temp=`${name}의 총점은${total}이고 평균은${avg}입니다.`
+    document.getElementById("result").innerHTML=temp; 
+        })
+    })
+
+</script>
