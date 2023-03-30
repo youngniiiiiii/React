@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    
+</head> 
+<body id="body">
+        <button type="button" id="btn1" style="background-color: moccasin;"
+        >배경색</button>
+        <button type="button" id="btn2" style="background-color: rgb(250, 255, 181);"
+        >배경색</button>
+        <button type="button" id="btn3" style="background-color: rgb(181, 254, 255);"
+        >배경색</button>
+        <button type="button" id="btn4" style="background-color: rgb(192, 181, 255);"
+        >배경색</button>
+        <button type="button" id="btn5" style="background-color: rgb(218, 181, 255);"
+        >배경색</button>
+        <button type="button" id="btn6" style="background-color: rgb(255, 181, 193);"
+        >배경색</button>
+        <button type="button" id="btn7" style="background-color: rgb(255, 181, 234);"
+        >배경색</button>
+</body>
+</html>
+<script>
+    $(document).ready( ()=>{
+        //방법1
+        $("button").click(function(){
+             $("body").css("background-color", 
+                 $(this).css("background-color"));
+        //방법2
+        // $("button").click( (btn)=>{
+        // console.log(btn);
+        // $("body").css("background-color",
+        //         btn.target.style.backgroundColor);
+
+        //방법3
+        // $("button").click( (btn)=>{
+        // console.log(btn);
+        // $("body").css("background-color",
+        //       $("#"+btn.target.id).css("background-color"));
+        })
+
+    })
+
+
+</script>
