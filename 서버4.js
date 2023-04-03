@@ -22,22 +22,24 @@ let server = http.createServer((request, response)=>{
     console.log( typeof(query) );
     
     if( pathname=="/add"){
-        response.writeHead(404, {'Content-Type' :'text/html;charset=utf-8'});
+        response.writeHead(200, {'Content-Type' :'text/html;charset=utf-8'});
         let x = parseInt(query.x);
         let y = parseInt(query.y);
         let z = x + y;
-        response.end(` ${x} ${y} = ${z}`);
-    }else if( pathname=="/sub"){
-        response.writeHead(404, {'Content-Type' :'text/html;charset=utf-8'});
+        response.end(` ${x} + ${y} = ${z}`);
+    }
+    else if( pathname=="/sub"){
+        response.writeHead(200, {'Content-Type' :'text/html;charset=utf-8'});
         let x = parseInt(query.x);
         let y = parseInt(query.y);
         let z = x - y;
-        response.end(` ${x} ${y} = ${z}`);
-    }else if(pathname=="/userinfo"){
-    console.log(query.userid != "" & query.username != "" );
-
+        response.end(` ${x} - ${y} = ${z}`);
+    }
+    else if(pathname=="/userinfo"){
         response.writeHead(200, {'Content-Type' :'text/html;charset=utf-8'});
-        response.end(`아이디 :${query.userid} 이름:${query.username}`);   
+        let x = query.username;
+        let y = query.userid;
+        response.end(`아이디 : ${x} 이름 : ${y}`);   
     }
     else{
         response.writeHead(404, {'Content-Type':'text/html;charset=utf-8'});
