@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- <%for(item of scoreData){%>
+        <%=item.name%> &nbsp; &nbsp;
+        <%=item.kor%> &nbsp; &nbsp;
+        <%=item.eng%> &nbsp; &nbsp;
+        <%=item.mat%> <br/>
+    <%}%> -->
+
+    <table>
+        <thead>
+            <th>이름</th>
+            <th>국어</th>
+            <th>영어</th>
+            <th>수학</th>
+            <th>합계</th>
+            <th>평균</th>
+        </thead>
+        <tbody>
+            <%for(score of scoreData){%>
+            <tr>
+                <td><%=score.name%></td>
+                <td><%=score.kor%></td>
+                <td><%=score.eng%></td>
+                <td><%=score.mat%></td>
+                <td><%=score.kor+score.eng+score.mat%></td>
+                <td><%=(score.kor+score.eng+score.mat)/3%></td>
+                
+            </tr>
+        <%}%>
+        </tbody>
+    </table>
+</body>
+</html>

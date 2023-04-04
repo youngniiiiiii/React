@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="/gugu"><!-- method="get" 없어도 get방식 -->
+        단 : <input type="text" name = "dan"><br/>
+        <button type="button" id="btnConfirm">확인</button>
+    </form>
+</body>
+</html>
+
+<script>
+     window.onload=()=>{
+        let btnConfirm = document.getElementById("btnConfirm");
+        btnConfirm.addEventListener("click", ()=>{
+            document.forms[0].submit();
+        });
+    }
+
+</script>
