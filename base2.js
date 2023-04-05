@@ -2,7 +2,8 @@ var express= require("express");
 var fs = require("fs");
 var ejs = require("ejs");
 var app = express();
-
+app.set("view engine", ejs)
+app.use(express.urlencoded({extended:false}));
 
 app.get("/test",(request, response)=>{
     response.writeHead(200,{"content-type":"text/html"});
