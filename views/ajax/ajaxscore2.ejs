@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+</head>
+<body>
+    <form>
+        이름 : <input type="text" name="name" id="name"><br/>
+        국어 : <input type="text" name="kor" id="kor"><br/>
+        영어 : <input type="text" name="eng" id="eng"><br/>
+        수학 : <input type="text" name="mat" id="mat"><br/>
+    <div id="result"></div>
+    <button type="button" id="btnScore">결과확인</button>
+    </form>
+</body>
+</html>
+<script>
+   $(document).ready(()=>{
+    $("#btnScore").click(()=>{
+        $.ajax({
+            url:"/ajax/score",
+            data:{"name":$("#name").val(), "kor":$("#kor").val, "eng":$("#eng").val,"mat":$("#mat").val},
+            dataType:"json"
+        })
+        .done((res, status, erro)=>{
+            console.log(res);
+            $("#result").val( res.result );
+        })
+        .fail((res, status, erro)=>{
+            console.log(status);
+        })
+    })
+   })
+</script>
