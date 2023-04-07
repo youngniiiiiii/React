@@ -3,7 +3,7 @@
 var mysql = require("mysql");
 const DBInfo={
     connectionLimit:10,
-    host:"localhost",
+    host:"127.0.0.1",
     user:"user01",
     password:"1234",
     database:"mydb",
@@ -37,3 +37,4 @@ async function mysqlRead(sql, params)
 }
 
 exports.mysqlRead = mysqlRead;      //이거 추가했다 내보내줘야함... 너써도된다 허락권한
+exports.DBInfo = DBInfo; 
