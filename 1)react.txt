@@ -1,0 +1,12 @@
+        //npm install -g create-react-app //CMD관리자 권한에서 설치!!
+        
+    //  프로젝트 생성 CMD-관리자 권한에서 실행
+    //     cd /react/react_workspace
+    //     create-react-app hello-react
+    //     cd hello_react
+    //     npm(yarn도 가능) start
+
+    //포트번호수정 p252
+    "start":"set PORT=3000 && react-scripts start"
+    
+//cd /react/react_workspace
