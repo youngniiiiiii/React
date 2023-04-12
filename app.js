@@ -6,12 +6,13 @@ let logger = require('morgan');
 const session = require("express-session")
 const MYSQLSTORE = require("express-mysql-session")(session);
 const DBInfo = require("./routes/commonDB") // 세션이 저장되 디비정보를 줘야 한다
+const cors = require('cors');
 
 let indexRouter = require('./routes/index');
 let usersRouter = require('./routes/users');
 let boardRouter = require('./routes/board');    //이거 추가했다
 let memberRouter = require('./routes/member');  //연결해준거 member.js랑
-
+let heroRouter = require('./routes/hero')
 let app = express();
 
 // view engine setup
@@ -35,10 +36,14 @@ app.use(session({
   saveUninitialized:false
 }));
 
+app.use(cors());  //보다 정밀하게 받는 방법 찾아 작성해야 한다.
+//현재는 아무데서나 요청오면 다 받음
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/board', boardRouter);                 //이거 추가했다
 app.use('/member', memberRouter);              //연결해줌
+app.use('/hero', heroRouter);
 //app.use('/member', memberRouter)는 Express 애플리케이션에서 /member 경로로 들어오는 HTTP 요청에 대해 memberRouter 미들웨어를 사용하도록 지정하는 코드입니다.
 //memberRouter는 express.Router() 메서드를 사용하여 생성된 객체로, 여러 개의 라우팅 핸들러를 가지는 라우터 객체입니다. 이를 app.use() 메서드를 사용하여 Express 애플리케이션에 연결함으로써, /member 경로에 대한 HTTP 요청에 대해 memberRouter 객체가 처리할 수 있도록 합니다.
 //예를 들어, memberRouter 객체가 /list, /create, /update, /delete와 같은 다양한 라우팅 핸들러를 가지고 있다면, app.use('/member', memberRouter) 코드는 /member/list, /member/create, /member/update, /member/delete와 같은 경로로 들어오는 HTTP 요청에 대해 memberRouter 객체가 적절한 라우팅 핸들러를 실행할 수 있도록 설정합니다.
