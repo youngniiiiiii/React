@@ -21,7 +21,7 @@ function getPaging(pg, totalCnt, pageGroupSize=10)
     pgGroupEnd = pgGroupStart + 10;
     if(pgGroupEnd>pnTotal)
         pgGroupEnd = pnTotal +1;
-    console.log(pg, pgGroupStart, pgGroupEnd);
+    //console.log(pg, pgGroupStart, pgGroupEnd);
 
     //함수는 반환값이 하나이어야 한다. JSON객체로 만들어 보내자
     return{pnTotal:pnTotal, pnStart:pgGroupStart, pnEnd:pgGroupEnd, pg:pg}
