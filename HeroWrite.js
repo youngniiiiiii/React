@@ -1,56 +1,93 @@
-import React, {useState} from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css'
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { SERVERIP } from '../../CommonUtil';
+import { Outlet, Link, NavLink, useNavigate, useParams } from "react-router-dom";
 
-function HeroWrite(props) {
-    const[hero_name, setHeroName]=useState("");
-    //useState함수가 문자열변수랑 변수값 바꾸는 함수를 만들어서 배열형태로 전달한다
-    const[hero_desc, setHeroDesc]=useState("");
+function HeroWrite(props){
+    let {id} = useParams(); //보내는 쪽에서 json객체로 보냄
+    let history = useNavigate();
 
-    //input태그에 값이 바뀌면 이 함수가 호출된다
-    const heroNameChange=(e)=>{
+    const [heroName, setHeroName]=useState("");
+    const [heroDesc, setHeroDesc]=useState("");
+
+    useEffect(()=>{
+        console.log("id", id);
+        async function loadData(id){
+            let results = await axios.get(SERVERIP+"/hero/view/"+id)
+            console.log(results.data.hero.hero_name)
+            console.log(results.data.hero.hero_desc)
+
+            setHeroName(results.data.hero.hero_name);
+            setHeroDesc(results.data.hero.hero_desc);
+        }
+        if( id!=undefined)  //write가 아니고 view로 호출할때 
+            loadData(id);
+        //window.onload 역할
+        //BoardWrite 컴포넌트가 /board/write 일때는 undefined가 오고
+        // /board/view/1 id에는 파라미터 값이 저장된다.
+    },[]);
+
+    const nameChange=(e)=>{
         setHeroName(e.target.value);
     }
-
-    //input태그에 값이 바뀌면 이 함수가 호출된다
-    const heroDescChange=(e)=>{
+    const descChange=(e)=>{
         setHeroDesc(e.target.value);
     }
-    //form태그를 써서 서버로 전송할때 <button>태그에 type="button"속성이 없으면
-    //버튼을 누르면 submit() 함수가 호출된다.
-    //submit 함수가 호출되면 form태그에 onSubmit이벤트핸들러가 호출된다.
-    //이때 잡아채서 서버에 전송하는 처리를 한다.
-    //onSubmit함수의 경우 무조건 서버로 전송을 한다.
-    //이걸 막기 위해서 preventDefault() 함수를 호출한다
-    //e는 entity의 약자.. 아무거나 써도 되는데 그냥 보통 e 쓴다
-    const onSubmit=(e)=>{
-        e.preventDefault(); //form태그를 통해 서버에 정보를 전송전에 호출된다
-                            //버튼의 기본기능을 정지시킨다.
-                            //submit버튼의 submit기능을 막고 별도의 처리
-        //spring은 데이터를 문자열로 와야 받는다
-        //Axios는 JSON으로 데이터를 주고 받는다
-        axios.post("http://localhost:9090/hero/write",
-                {hero_name:hero_name, hero_desc:hero_desc})
-             .then( (res)=>{
-                console.log(res.data.result);
-                window.location.reload();   //화면 다시 불러오기
-                //location객체는 원래 존재하는데 부모가 윈도우
-                //react가 아니면 location.reload()만 호출해도 되는데
-                //react는 window.location.reload()로 호출해라
-             })
-             .catch( (error)=>{
-                console.log( error );
-             })
+    //서버로 전송하기
+    const postData=()=>{
+        //데이터를 json으로 묶어서 보내야 한다
+        let data ={"hero_name":heroName, "hero_desc":heroDesc};
+        axios.post(SERVERIP+"/hero/write", data)
+        .then( (res)=>{
+           console.log( res.data );
+           history("/hero/list");  //redirect에 대응
+        })
+        .catch( (error)=>{
+            console.log( error );
+        })
     }
-    return (
-        <div>
-            <form onSubmit={onSubmit}>
-            <h3>영웅</h3>
-            이름 : <input type="text" onChange={heroNameChange}></input><br/>
-            업적 : <input type="text" onChange={heroDescChange}></input><br/>
-            <button>추가</button>            
-            </form>
+    return(
+        <div className  ='container'>
+            <h1>게시판 글쓰기</h1>
+            <table className="table table-hover " style={{marginTop: "30px"}}>
+            <colgroup>
+                <col width="25%"/>
+                <col width="*"/>
+            </colgroup>
+        
+            <tbody>
+             
+              <tr>
+                <td>이름</td>
+                <td>
+                    <div className="mb-3" style={{marginTop: "13px"}}>
+                        <input type="text" className="form-control" 
+                        value={heroName}
+                        placeholder="이름을 입력하세요" onChange={nameChange}/>
+                    </div>
+                </td>
+              </tr>      
+              <tr>
+                <td>업적</td>
+                <td>
+                    <div className="mb-3" style={{marginTop: "13px"}}>
+                        <input type="text" className="form-control" 
+                        value={heroDesc}
+                        placeholder="업적을 입력하세요" onChange={descChange} />
+                    </div>
+                </td>
+              </tr>          
+            </tbody>
+          </table>
+       
+          <div className="container mt-3" style={{textAlign:"right"}}>
+            <Link to="#" className="btn btn-secondary" onClick={postData}>등록</Link>
+            <Link to="#" className="btn btn-secondary">취소</Link>
+          
+          </div>
         </div>
-    );
+    )
 }
 
 export default HeroWrite;
