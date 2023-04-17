@@ -1,9 +1,61 @@
 //rest_board.js
+//https://songhee96.tistory.com/27
+
 let express = require("express");
 let router = express.Router();
 let commonDB = require("./commonDB");
 let commonUtil = require("./commonUtil");
 router.use(express.urlencoded({ extended: false }));
+//npm install murter : nodejs에서 파일 업로드를 담당
+
+let multer = require("multer");
+let path = require("path"); //파일이나 디스크 관리 모듈, 주로 경로
+//파일을 업로드하는데 필요한 정보를 설정해야 한다
+let storage = multer.diskStorage({
+  destination:function(req, file, cb){
+    cb(null, "./uploads/board")    //파일 업로드 경로지정
+    //cb - 파일업로드시 이 함수가 호출된다.
+  },
+  filename:function(req, file, cb){
+    //new Date => 현재 날짜와 시간, 분초까지 알아온다. => valueOf() 문자열로 변경
+    //본래 파일명이 중복날 가능성이 있어서 별도의 파일명을 부여한다
+    //확장자는 본래파일명으로 해야 한다.
+    //pate.extname(파일명) = 파일의 확장자를 가져온다.
+    //두번째 인자인 file이 업로드되는 파일인데 이 파일의 originalfilename에 원래 파일명이 있다.
+    let newFilename = new Date().valueOf() + path.extname(file.originalname);
+    cb(null, newFilename);
+  },
+})
+
+//제한
+const limits = {
+  fieldNameSize: 200, //필드명 사이즈 최대값
+  filedSize: 1024 * 1024, // 필드 사이즈 값 설정 (기본값 1MB)
+  fields: 15, // 파일 형식이 아닌 필드의 최대 개수 (기본 값 무제한)
+  fileSize: 20*1024*1024, //multipart 형식 폼에서 최대 파일 사이즈(bytes) "16MB 설정" (기본 값 무제한)
+  files: 10, //multipart 형식 폼에서 파일 필드 최대 개수 (기본 값 무제한)
+};
+
+
+//확장자 필터
+const fileFilter = (req, file, callback) => {
+  const typeArray = file.mimetype.split("/");
+  const fileType = typeArray[1];
+
+  if (fileType == "jpg" || fileType == "jpeg" || fileType == "png") {
+    callback(null, true);
+  } else {
+    return callback(null, false);
+  }
+};
+
+
+let upload = multer({
+  storage: storage,  //이미지 업로드
+  // limits: limits,     //업로드 제한
+  // fileFilter: fileFilter,   //파일 확장자 제한
+}); 
+
 
 /* GET home page. */
 //http://localhost:9090/rest_board/list     --X(안된다.)
@@ -23,9 +75,11 @@ router.get("/list/:pg", async function (req, res, next) {
       sql = `
               SELECT A.id, A.title,A.writer,A.num, A.username, A.contents
                 ,date_format(A.wdate, '%Y-%m-%d') wdate
+                , A.filename, A.filelink
                 FROM
                 (
                 select A.id, A.title, A.writer, A.wdate, C.username, A.contents
+                ,A.filename, A.filelink 
                 ,@rownum:=@rownum+1 num
                 FROM tb_board A
                 LEFT OUTER JOIN (SELECT @rownum:=0) B on 1=1
@@ -57,12 +111,27 @@ router.get("/list/:pg", async function (req, res, next) {
 //   res.render("board/board_view", { boardItem: boardItem });
 // });
 
-router.post("/write", async function (req, res, next) {
+
+//upload.single("file") - 파일 업로드 부분만 중가네 따로 처리한다
+//upload.single(폼태그에서 file속성의 name이 file이다)
+//<input type="file" name="file" />이때 name 속성값이다
+//파일전송시 form태그에 enctype="form-data/multipart" 속성이 반드시 있어야 한다
+//ejs나 jsp같은데서 사용
+
+//ajax로 전송할때는 FormData라는 객체를 이용해서 보내야 한다
+//$.ajax나 axios 모던스크립트 fetch라는 ajax 모듈 추가되었음
+
+router.post("/save", upload.single("file"), async function (req, res, next) {
   checkInfos=[
     {key:"title",type:"str", range:200},
     {key:"writer",type:"str", range:40},
     {key:"contents",type:"str", range:-1}
   ]
+
+  let file = req.file;
+  console.log( file.originalname ); //원래이름
+  console.log( file.filename ); //부여한 이름
+
   //수행결과값이 0이면 문제 없는거고 다른 숫자가 온다 오류임
   insertInfo = commonUtil.checkInfo ( req, checkInfos );
   if( insertInfo["result"]!=0)
@@ -74,6 +143,8 @@ router.post("/write", async function (req, res, next) {
   let title = req.body.title;
   let writer = req.body.writer;
   let contents = req.body.contents;
+  let filename = file.filename;
+  let filelink = "uploads/board/"+filename;
 
   let sql = `select count(*) cnt from tb_member where userid='${writer}'`;
   results = await commonDB.mysqlRead(sql, []);
@@ -84,35 +155,35 @@ router.post("/write", async function (req, res, next) {
   }
 
 
-  sql = `insert into tb_board(title, writer, contents, wdate)
-        values( '${title}', '${writer}', '${contents}', now())`;
-        await commonDB.mysqlRead(sql, []);
+  sql = `insert into tb_board(title,writer,contents,wdate, filename, filelink)
+         values('${title}','${writer}','${contents}',now(),'${filename}' ,'${filelink}')`;
+  await commonDB.mysqlRead(sql, []);
 
   res.json({"result": "success"});
 });
 
-router.post("/save", async function (req, res, next) {
-  //{title:"제목" , writer:"test", content:"내용"}
-  //응답 성공시 result: "success", msg :"등록성공"
-  //응답 실패시 result: "fail" , msg: "등록실패"
+// router.post("/save", async function (req, res, next) {
+//   //{title:"제목" , writer:"test", content:"내용"}
+//   //응답 성공시 result: "success", msg :"등록성공"
+//   //응답 실패시 result: "fail" , msg: "등록실패"
 
-  try{
-  let title = req.body.title;
-  let writer = req.body.writer;
-  let contents = req.body.contents;
-  let params = [title, writer, contents];
-  sql = `insert into tb_board(title, writer, contents, wdate)
-         values(?,?,?,now())`;
-  await commonDB.mysqlRead(sql, [title, writer, contents]);
+//   try{
+//   let title = req.body.title;
+//   let writer = req.body.writer;
+//   let contents = req.body.contents;
+//   let params = [title, writer, contents];
+//   sql = `insert into tb_board(title, writer, contents, wdate)
+//          values(?,?,?,now())`;
+//   await commonDB.mysqlRead(sql, [title, writer, contents]);
 
-  res.json({result:"success", msg:"등록성공"});
+//   res.json({result:"success", msg:"등록성공"});
 
-  }
-  catch(e){
-    res.json({result:"fail", msg:"등록실패"})
-    return;
-  }
-});
+//   }
+//   catch(e){
+//     res.json({result:"fail", msg:"등록실패"})
+//     return;
+//   }
+// });
 
 router.get("/view/:id", async function (req, res, next) {
   let id = req.params.id;
